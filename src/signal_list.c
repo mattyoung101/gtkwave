@@ -753,31 +753,7 @@ static gboolean key_press_event(GtkWidget *widget, GdkEventKey *event)
 
     GdkModifierType state = event->state & (GDK_SHIFT_MASK | GW_CONTROL_MASK);
 
-    if (state == GDK_SHIFT_MASK) {
-        if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up) {
-            // Shift + Up: Move cursor up one trace
-            if (signal_list->cursor != NULL) {
-                GwTrace *cursor = GivePrevTrace(signal_list->cursor);
-                if (cursor != NULL) {
-                    set_cursor(signal_list, cursor);
-                }
-            } else {
-                set_cursor(signal_list, GLOBALS->traces.first);
-            }
-            return GDK_EVENT_STOP;
-        } else if (event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down) {
-            // Shift + Down: Move cursor down one trace
-            if (signal_list->cursor != NULL) {
-                GwTrace *cursor = GiveNextTrace(signal_list->cursor);
-                if (cursor != NULL) {
-                    set_cursor(signal_list, cursor);
-                }
-            } else {
-                set_cursor(signal_list, GLOBALS->traces.first);
-            }
-            return GDK_EVENT_STOP;
-        }
-    } else if (state == GW_CONTROL_MASK) {
+    if (state == GW_CONTROL_MASK) {
         if (event->keyval == GDK_KEY_A) {
             // CTRL + a: Highlight all traces
             menu_dataformat_highlight_all(NULL, 0, NULL);
@@ -796,7 +772,29 @@ static gboolean key_press_event(GtkWidget *widget, GdkEventKey *event)
             return GDK_EVENT_STOP;
         }
     } else if (!state) {
-        if (event->keyval == GDK_KEY_Left || event->keyval == GDK_KEY_KP_Left) {
+        if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up) {
+            // Up: Move cursor up one trace
+            if (signal_list->cursor != NULL) {
+                GwTrace *cursor = GivePrevTrace(signal_list->cursor);
+                if (cursor != NULL) {
+                    set_cursor(signal_list, cursor);
+                }
+            } else {
+                set_cursor(signal_list, GLOBALS->traces.first);
+            }
+            return GDK_EVENT_STOP;
+        } else if (event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down) {
+            // Down: Move cursor down one trace
+            if (signal_list->cursor != NULL) {
+                GwTrace *cursor = GiveNextTrace(signal_list->cursor);
+                if (cursor != NULL) {
+                    set_cursor(signal_list, cursor);
+                }
+            } else {
+                set_cursor(signal_list, GLOBALS->traces.first);
+            }
+            return GDK_EVENT_STOP;
+        } else if (event->keyval == GDK_KEY_Left || event->keyval == GDK_KEY_KP_Left) {
             // Left: Find next edge to the left
             service_left_edge(NULL, NULL);
             return GDK_EVENT_STOP;
